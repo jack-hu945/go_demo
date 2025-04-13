@@ -19,3 +19,11 @@ func TestReadFileWithBuffer(t *testing.T) {
 func TestWriteFileWithBufferLine(t *testing.T) {
 	WriteFileWithBuffer()
 }
+
+func TestCreateFile(t *testing.T) {
+	CreateFile("./data/myword.txt")
+}
+
+func TestTraverseFile(t *testing.T) {
+	TraverseFile("./data")
+}

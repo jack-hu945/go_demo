@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func WriteFile() {
@@ -83,4 +84,48 @@ func WriteFileWithBuffer() {
 		}
 		writer.Flush()
 	}
+}
+
+func CreateFile(fileName string) {
+	os.Remove(fileName)
+	file, err := os.Create(fileName)
+	if err != nil {
+		fmt.Println("create file error:", err)
+	} else {
+		defer file.Close()
+		file.Chmod(0o666)
+		fmt.Printf("fd=%d\n", file.Fd())
+
+		file.WriteString("never ever give up\n")
+		info, _ := file.Stat()
+		fmt.Printf("file is dir: %t\n", info.IsDir())
+		fmt.Printf("file mod time: %s\n", info.ModTime())
+		fmt.Printf("mode %v\n", info.ModTime())
+		fmt.Printf("size %vB\n", info.Size())
+	}
+
+	os.Mkdir("./data/sys", os.ModePerm)
+	os.MkdirAll("./data/sys1/dir", 0o777)
+
+	os.Rename("./data/sys", "./data/sys2")
+	os.Rename("./data/sys1/dir", "./data/sys/dir") //move
+
+}
+
+// traverse file
+func TraverseFile(path string) error {
+
+	filepath.Walk(path, func(Subpath string, info os.FileInfo, err error) error {
+
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			fmt.Printf("dir: %s\n", Subpath)
+		} else if info.Mode().IsRegular() {
+			fmt.Printf("file: %s, fileName: %s\n", Subpath, info.Name())
+		}
+		return nil
+	})
+	return nil
 }
