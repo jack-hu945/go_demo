@@ -1,6 +1,7 @@
 package myio
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -48,5 +49,38 @@ func ReadFile() {
 				break
 			}
 		}
+	}
+}
+
+func ReadFileWithBuffer() {
+	if fin, err := os.Open("./data/verse.txt"); err != nil {
+		fmt.Printf("open file failed: %v\n,", err)
+	} else {
+		defer fin.Close()
+		reader := bufio.NewReader(fin)
+		for {
+			line, err := reader.ReadString('\n') //read until '\n'
+			if len(line) > 0 {
+				fmt.Print(line)
+			}
+
+			if err == io.EOF {
+				break
+			}
+		}
+	}
+}
+
+func WriteFileWithBuffer() {
+	if fout, err := os.OpenFile("./data/verse.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666); err != nil {
+		fmt.Println("open file error:", err)
+	} else {
+		defer fout.Close()
+		writer := bufio.NewWriter(fout)
+		for i := 0; i < 3; i++ {
+			writer.WriteString("nice to meet you\n")
+			writer.Write([]byte("it is good day\n"))
+		}
+		writer.Flush()
 	}
 }
