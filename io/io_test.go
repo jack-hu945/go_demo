@@ -27,3 +27,7 @@ func TestCreateFile(t *testing.T) {
 func TestTraverseFile(t *testing.T) {
 	TraverseFile("./data")
 }
+
+func TestCopyFile(t *testing.T) {
+	CopyFile("./data/verse.txt", "./data/verse_copy.txt")
+}

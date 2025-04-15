@@ -2,6 +2,7 @@ package myio
 
 import (
 	"bufio"
+	"compress/gzip"
 	"fmt"
 	"io"
 	"os"
@@ -128,4 +129,39 @@ func TraverseFile(path string) error {
 		return nil
 	})
 	return nil
+}
+
+// io.Copy(fout, fin)
+func CopyFile(src, dst string) {
+	fin, err := os.Open(src)
+	if err != nil {
+		fmt.Println("open file error1:", err)
+		return
+	}
+
+	fout, err := os.OpenFile(dst, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o666)
+	if err != nil {
+		fmt.Println("open file error2:", err)
+		return
+	}
+
+	// bs := make([]byte, 1024)
+	// for {
+	// 	n, err := fin.Read(bs)
+	// 	if n > 0 {
+	// 		fout.Write(bs[:n])
+	// 	}
+	// 	if err == io.EOF {
+	// 		break
+	// 	}
+	// }
+
+	Writer := gzip.NewWriter(fout) //压缩
+	//Writer := zlip.NewWriter(fout)   //压缩算法不一致
+	io.Copy(Writer, fin)
+
+	reader, _ := gzip.NewReader(fin) //解压
+	fin.Close()
+	fout.Close()
+	return
 }
