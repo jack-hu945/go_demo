@@ -1,0 +1,2 @@
+{"time":"2025-04-16T20:48:09.021110823+08:00","level":"INFO","source":{"function":"mylog.Slog","file":"/home/jake_hu/golang/log/log.go","line":54},"msg":"hello sean\n"}
+{"time":"2025-04-16T20:48:09.021145698+08:00","level":"ERROR","source":{"function":"mylog.Slog","file":"/home/jake_hu/golang/log/log.go","line":55},"msg":"hello sean1"}
